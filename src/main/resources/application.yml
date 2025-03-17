@@ -1,0 +1,10 @@
+server:
+  port: 90
+spring:
+  application:
+    name: psavi-web
+  datasource:
+    url: jdbc:mysql://localhost:3306/PSAVI?useSSL=false
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
