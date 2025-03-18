@@ -8,3 +8,13 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:/schema.sql
+  jpa:
+    properties:
+      hibernate: format_sql
+    show-sql: true
+    generate-ddl: false
+
