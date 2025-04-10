@@ -1,7 +1,10 @@
 package com.psavi.psavi_web.controller;
 
 import com.psavi.core.entity.User;
+import com.psavi.core.service.contact.contactService;
 import com.psavi.core.service.serviceInterface;
+import com.psavi.core.service.user.userService;
+import com.psavi.psavi_web.form.contactForm;
 import com.psavi.psavi_web.form.signinForm;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,12 @@ public class controllerWeb {
     @Autowired
     private serviceInterface service;
 
+    @Autowired
+    private userService userService;
+
+    @Autowired
+    private contactService contactService;
+
     @GetMapping("/")
     public String index() {
         return "index";
@@ -31,7 +40,7 @@ public class controllerWeb {
     }
 
     @PostMapping("/create")
-    public String createUser(@Valid @ModelAttribute signinForm form, BindingResult result,
+    public String createUser(@Valid @ModelAttribute("signinForm") signinForm form, BindingResult result,
                               Model model){
         if(result.hasErrors()){
             return "signin";
@@ -49,7 +58,7 @@ public class controllerWeb {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(form.getPassword());
             user.setPassword(hashedPassword);
-            service.create(user);
+            userService.create(user);
         }else{
             model.addAttribute("message", "les mots de passes ne sont pas identiques");
             return "signin";
@@ -68,7 +77,26 @@ public class controllerWeb {
     }
 
     @GetMapping("/contact")
-    public String displayContact(){
+    public String displayContact(@ModelAttribute contactForm contactForm){
+        return "contact";
+    }
+
+    @PostMapping("/contactSubmit")
+    public String handleContactForm(@Valid @ModelAttribute("contactForm") contactForm form,
+                                    BindingResult result,
+                                    Model model) {
+        if (result.hasErrors()) {
+            return "contact";
+        }
+
+        try {
+            contactService.sendContactEmail(form.getNom(), form.getEmail(), form.getMessage());
+            model.addAttribute("successMessage", "Votre message a bien été envoyé !");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Une erreur est survenue lors de l'envoi du message.");
+        }
+
         return "contact";
     }
 }
+

@@ -19,7 +19,8 @@ public class securityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/bootstrap.v5.3.3/**").permitAll()
-                        .requestMatchers("/", "/shop", "/contact", "/signin").permitAll()
+                        .requestMatchers("/css/**").permitAll()
+                        .requestMatchers("/", "/shop", "/contact", "/signin", "/signup", "/create", "/contactSubmit").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

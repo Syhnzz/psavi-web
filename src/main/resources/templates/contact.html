@@ -1,13 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Contact</title>
+    <title>Contactez-nous</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/bootstrap.v5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .btn-primary {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 18px;
+            color: white;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+        }
+    </style>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
-    <h1>Contact</h1>
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h2 class="mb-4 text-center">Contactez-nous</h2>
+
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+            <form th:action="@{/contactSubmit}" method="POST" th:object="${contactForm}" class="card p-4 shadow-sm rounded">
+
+                <div class="form-floating mb-3">
+                    <input type="text" th:field="*{nom}" class="form-control" id="nom" placeholder="Votre nom">
+                    <label for="nom">Nom</label>
+                    <div th:if="${#fields.hasErrors('nom')}" class="text-danger small" th:errors="*{nom}"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="Votre email">
+                    <label for="email">Email</label>
+                    <div th:if="${#fields.hasErrors('email')}" class="text-danger small" th:errors="*{email}"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea th:field="*{message}" class="form-control" id="message" placeholder="Votre message" style="height: 150px;"></textarea>
+                    <label for="message">Message</label>
+                    <div th:if="${#fields.hasErrors('message')}" class="text-danger small" th:errors="*{message}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/bootstrap.v5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
