@@ -1,10 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
+    <link href="/bootstrap.v5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .form-container h1 {
+            margin-bottom: 30px;
+            font-size: 35px;
+            font-weight: bold;
+            background: -webkit-linear-gradient(#6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 18px;
+            color: white;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+        }
+
+        .text-danger {
+            font-size: 12px;
+            color: red;
+        }
+
+        .message {
+            font-size: 14px;
+            color: red;
+            margin-bottom: 20px;
+        }
+
+    </style>
 </head>
 <body>
 
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="form-container">
+        <h1>Inscription</h1>
+
+        <form th:action="@{/create}" th:object="${signinForm}" method="POST">
+            <div class="form-group">
+                <label for="nom">Nom</label>
+                <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="Nom">
+                <div th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="prenom">Prénom</label>
+                <input type="text" th:field="*{prenom}" id="prenom" class="form-control" placeholder="Prénom">
+                <div th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="region">Région</label>
+                <input type="text" th:field="*{region}" id="region" class="form-control" placeholder="Région">
+                <div th:if="${#fields.hasErrors('region')}" th:errors="*{region}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="ville">Ville</label>
+                <input type="text" th:field="*{ville}" id="ville" class="form-control" placeholder="Ville">
+                <div th:if="${#fields.hasErrors('ville')}" th:errors="*{ville}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="adresse">Adresse</label>
+                <input type="text" th:field="*{adresse}" id="adresse" class="form-control" placeholder="Adresse">
+                <div th:if="${#fields.hasErrors('adresse')}" th:errors="*{adresse}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="Email">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" th:field="*{password}" id="password" class="form-control" placeholder="Mot de passe">
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirmation du mot de passe</label>
+                <input type="password" th:field="*{confirmPassword}" id="confirmPassword" class="form-control" placeholder="Confirmation du mot de passe">
+                <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></div>
+                <div th:text="${message}" class="message"></div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/bootstrap.v5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
