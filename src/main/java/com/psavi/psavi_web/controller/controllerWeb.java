@@ -1,13 +1,21 @@
 package com.psavi.psavi_web.controller;
 
+import com.psavi.core.entity.Discussion;
 import com.psavi.core.entity.User;
 import com.psavi.core.service.contact.contactService;
+import com.psavi.core.service.discussion.discussionService;
+import com.psavi.core.service.message.messageService;
 import com.psavi.core.service.serviceInterface;
 import com.psavi.core.service.user.userService;
 import com.psavi.psavi_web.form.contactForm;
+import com.psavi.psavi_web.form.discussionForm;
 import com.psavi.psavi_web.form.signinForm;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,17 +25,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class controllerWeb {
-
-    @Autowired
-    private serviceInterface service;
 
     @Autowired
     private userService userService;
 
     @Autowired
     private contactService contactService;
+
+    @Autowired
+    private discussionService discussionService;
+
+    @Autowired
+    private messageService messageService;
 
     @GetMapping("/")
     public String index() {
@@ -46,6 +59,7 @@ public class controllerWeb {
             return "signin";
         }
         User user = new User();
+        user.setUsername(form.getUsername());
         user.setNom(form.getNom());
         user.setPrenom(form.getPrenom());
         user.setRegion(form.getRegion());
@@ -71,9 +85,43 @@ public class controllerWeb {
         return "login";
     }
 
+    @PostMapping("/login-success")
+    public String onLoginSuccess(HttpSession session, @AuthenticationPrincipal UserDetails userDetails) {
+        session.setAttribute("username", userDetails.getUsername());
+        return "redirect:/";
+    }
+
+    @GetMapping("/password-mail")
+    public String displaypassswordMail(){
+        return "password-mail";
+    }
+
     @GetMapping("/shop")
     public String displayShop(){
         return "shop";
+    }
+
+    @GetMapping("/communaute")
+    public String displayCommunaute(@ModelAttribute discussionForm form){
+        return "community";
+    }
+
+    @PostMapping("/create-discussion")
+    public String createDiscussion(@Valid @ModelAttribute("discussionForm") discussionForm discussionForm,
+                                   BindingResult result, @AuthenticationPrincipal UserDetails userDetails, Model model){
+        Discussion discussion = new Discussion();
+        User user = userService.findByEmail(userDetails.getUsername());
+        if (user == null) {
+            throw new IllegalStateException("Utilisateur introuvable : " + userDetails.getUsername());
+        }
+        discussion.setTitre(discussionForm.getTitre());
+        discussion.setAuteur(user);
+        discussion.setDateDernierMessage(LocalDateTime.now());
+
+        discussionService.create(discussion);
+
+        model.addAttribute("successMessage", "Discussion créée avec succès !");
+        return "community";
     }
 
     @GetMapping("/contact")

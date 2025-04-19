@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Communauté</title>
+    <link href="/bootstrap.v5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Espace de discussion</h2>
+
+    <div class="card mb-4" sec:authorize="isAuthenticated()">
+        <div class="card-body">
+            <h5 class="card-title">Créer une discussion</h5>
+            <form th:action="@{/create-discussion}"id="create-discussion-form" method="post" th:object="${discussionForm}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="text" class="form-control" th:field="*{titre}"id="titre" placeholder="Titre de la discussion" required>
+                </div>
+                <button type="submit" class="btn btn-gradient">Créer</button>
+                <div th:if="${successMessage}" class="form-text mt-2 text-success">
+                    <span th:text="${successMessage}"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="discussions-list" class="row"></div>
+</div>
+
+<script src="/js/discussions.js" defer></script>
+
+<script src="/bootstrap.v5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -23,9 +23,7 @@
             margin-bottom: 30px;
             font-size: 35px;
             font-weight: bold;
-            background: -webkit-linear-gradient(#6a11cb, #2575fc);
             -webkit-background-clip: text;
-            color: transparent;
         }
 
         .form-group label {
@@ -85,6 +83,13 @@
 
         <form th:action="@{/create}" th:object="${signinForm}" method="POST">
             <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" th:field="*{username}" id="username" class="form-control" placeholder="Nom d'utilisateur">
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></div>
+                <p>Le nom d'utilisateur ne doit pas contenir d'espaces et doit faire au maximum 12 caractères</p>
+            </div>
+
+            <div class="form-group">
                 <label for="nom">Nom</label>
                 <input type="text" th:field="*{nom}" id="nom" class="form-control" placeholder="Nom">
                 <div th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}" class="text-danger"></div>
@@ -124,6 +129,7 @@
                 <label for="password">Mot de passe</label>
                 <input type="password" th:field="*{password}" id="password" class="form-control" placeholder="Mot de passe">
                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></div>
+                <p>Le mot de passe doit contenir 8 caractères, 1 majuscule et 1 chiffre</p>
             </div>
 
             <div class="form-group">

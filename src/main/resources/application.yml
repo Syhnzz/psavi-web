@@ -1,5 +1,9 @@
 server:
   port: 90
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 30m
 spring:
   application:
     name: psavi-web
