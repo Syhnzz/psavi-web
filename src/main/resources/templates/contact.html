@@ -5,6 +5,7 @@
     <title>Contactez-nous</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/bootstrap.v5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
         .btn-primary {
@@ -29,6 +30,7 @@
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+<main>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -69,6 +71,9 @@
         </div>
     </div>
 </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script src="/bootstrap.v5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -1,9 +1,19 @@
+html, body {
+    height: 100%;
+}
+
 body {
     margin-top: 80px;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar-brand{
     background: -webkit-linear-gradient(#6a11cb, #2575fc);
     -webkit-background-clip: text;
     color: transparent;
+}
+
+main {
+    flex: 1;
 }
