@@ -1,31 +1,38 @@
 package com.psavi.psavi_web.controller;
 
 import com.psavi.core.entity.Discussion;
+import com.psavi.core.entity.Message;
 import com.psavi.core.entity.User;
 import com.psavi.core.service.contact.contactService;
 import com.psavi.core.service.discussion.discussionService;
 import com.psavi.core.service.message.messageService;
-import com.psavi.core.service.serviceInterface;
 import com.psavi.core.service.user.userService;
+import com.psavi.psavi_web.config.recaptchaConfig;
 import com.psavi.psavi_web.form.contactForm;
 import com.psavi.psavi_web.form.discussionForm;
 import com.psavi.psavi_web.form.signinForm;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class controllerWeb {
@@ -41,6 +48,9 @@ public class controllerWeb {
 
     @Autowired
     private messageService messageService;
+
+    @Autowired
+    private recaptchaConfig recaptchaConfig;
 
     @GetMapping("/")
     public String index() {
@@ -110,7 +120,7 @@ public class controllerWeb {
     public String createDiscussion(@Valid @ModelAttribute("discussionForm") discussionForm discussionForm,
                                    BindingResult result, @AuthenticationPrincipal UserDetails userDetails, Model model){
         Discussion discussion = new Discussion();
-        User user = userService.findByEmail(userDetails.getUsername());
+        User user = userService.getByEmail(userDetails.getUsername());
         if (user == null) {
             throw new IllegalStateException("Utilisateur introuvable : " + userDetails.getUsername());
         }
@@ -124,18 +134,68 @@ public class controllerWeb {
         return "community";
     }
 
+    @GetMapping("/discussion/{discussionId}")
+    public String getDiscussionDetails(@PathVariable Integer discussionId, Model model) {
+        Discussion discussion = discussionService.getById(discussionId);
+
+        List<Message> messages = messageService.getByDiscussionId(discussionId);
+        model.addAttribute("discussion", discussion);
+        model.addAttribute("messages", messages);
+
+        return "discussion-details";
+    }
+
+    @PostMapping("/createMessage")
+    public String createMessage(@RequestParam("contenu") String contenu,
+                                @RequestParam("discussionId") Integer discussionId,
+                                @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) return "redirect:/login";
+
+        User auteur = userService.getByEmail(userDetails.getUsername());
+        Discussion discussion = discussionService.getById(discussionId);
+
+        Message message = new Message();
+        message.setContenu(contenu);
+        message.setAuteur(auteur);
+        message.setDiscussion(discussion);
+        message.setDateEnvoi(LocalDateTime.now());
+
+        messageService.create(message);
+
+        return "redirect:/discussion/" + discussionId;
+    }
+
+
     @GetMapping("/contact")
-    public String displayContact(@ModelAttribute contactForm contactForm){
+    public String displayContact(@ModelAttribute contactForm contactForm, Model model){
+        model.addAttribute("recaptchaSiteKey", recaptchaConfig.getSiteKey());
         return "contact";
     }
 
     @PostMapping("/contactSubmit")
     public String handleContactForm(@Valid @ModelAttribute("contactForm") contactForm form,
-                                    BindingResult result,
+                                    BindingResult result, @RequestParam("g-recaptcha-response") String captchaResponse,
                                     Model model) {
+
+        String url = "https://www.google.com/recaptcha/api/siteverify";
+        String secretKey = recaptchaConfig.getSecretKey();
+
+        RestTemplate restTemplate = new RestTemplate();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("secret", secretKey);
+        params.add("response", captchaResponse);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params);
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+        Map body = response.getBody();
+
         if (result.hasErrors()) {
             return "contact";
         }
+
+        if (!(Boolean) body.get("success")) {
+            model.addAttribute("captchaError", "Captcha invalide. Veuillez réessayer.");
+            return "contact"; }
 
         try {
             contactService.sendContactEmail(form.getNom(), form.getEmail(), form.getMessage());
@@ -145,6 +205,20 @@ public class controllerWeb {
         }
 
         return "contact";
+    }
+
+    @GetMapping("/compte")
+    public String displayCompte(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userService.getByEmail(userDetails.getUsername());
+        model.addAttribute("userUpdate", user);
+        return "account";
+    }
+
+    @PostMapping("/update-account")
+    public String modifyAccount(@ModelAttribute("userUpdate") User user, RedirectAttributes redirectAttributes) {
+        userService.update(user);
+        redirectAttributes.addFlashAttribute("successMessage", "Votre compte a été mis a jour");
+        return "redirect:/compte";
     }
 }
 

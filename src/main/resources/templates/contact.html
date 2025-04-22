@@ -27,6 +27,8 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -55,6 +57,11 @@
                     <textarea th:field="*{message}" class="form-control" id="message" placeholder="Votre message" style="height: 150px;"></textarea>
                     <label for="message">Message</label>
                     <div th:if="${#fields.hasErrors('message')}" class="text-danger small" th:errors="*{message}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="g-recaptcha" th:attr="data-sitekey=${recaptchaSiteKey}"></div>
+                    <div th:if="${captchaError}" class="text-danger small" th:text="${captchaError}"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Envoyer</button>

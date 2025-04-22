@@ -11,11 +11,13 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Espace de discussion</h2>
+    <br><br>
+    <h3>Liste des sujets</h3>
 
     <div class="card mb-4" sec:authorize="isAuthenticated()">
         <div class="card-body">
             <h5 class="card-title">Créer une discussion</h5>
-            <form th:action="@{/create-discussion}"id="create-discussion-form" method="post" th:object="${discussionForm}" enctype="multipart/form-data">
+            <form th:action="@{/create-discussion}" id="create-discussion-form" method="post" th:object="${discussionForm}" enctype="multipart/form-data">
                 <div class="mb-3">
                     <input type="text" class="form-control" th:field="*{titre}"id="titre" placeholder="Titre de la discussion" required>
                 </div>
@@ -29,6 +31,8 @@
 
     <div id="discussions-list" class="row"></div>
 </div>
+
+<div id="paginationContainer"></div>
 
 <script src="/js/discussions.js" defer></script>
 

@@ -34,3 +34,6 @@ spring:
           auth: true
           starttls:
             enable: true
+recaptcha:
+  site-key: "6LfOIh8rAAAAAEOM06iy1kcbalBWGnosCmb2EXbX"
+  secret-key: "6LfOIh8rAAAAAH7BX7Aszeg-nLl4pK2reXPzgKAj"

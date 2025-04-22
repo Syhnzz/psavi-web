@@ -26,7 +26,7 @@ public class securityConfig {
                         .requestMatchers("/bootstrap.v5.3.3/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/js/**").permitAll()
-                        .requestMatchers("/", "/shop", "/contact", "/signin", "/signup", "/create", "/contactSubmit", "/communaute", "/login", "/password-mail", "/logout", "/api/**").permitAll()
+                        .requestMatchers("/", "/shop", "/contact", "/signin", "/signup", "/create", "/contactSubmit", "/communaute","/discussion/**", "/login", "/password-mail","/compte", "/logout", "/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
