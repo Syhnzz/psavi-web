@@ -19,7 +19,7 @@ Elle fournit :
 
 ---
 
-## 🎯 Fonctionnalités
+## Fonctionnalités
 - Gestion des utilisateurs
 - Création et consultation de discussions
 - Création et consultation de messages
@@ -27,7 +27,7 @@ Elle fournit :
 
 ---
 
-## 🛠 Technologies
+## Technologies
 - Java
 - Spring Boot (Spring MVC, Spring Security)
 - API REST
@@ -39,13 +39,13 @@ Elle fournit :
 
 ---
 
-## 🏗 Architecture
+## Architecture
 psavi-web ├── api            # Contrôleurs REST ├── controller     # Contrôleurs web (vues Thymeleaf) ├── config         # Configuration sécurité ├── form           # Objets formulaires └── resources ├── static ├── templates └── schema.sql
 
 
 ---
 
-## 🔗 API REST (extraits)
+## API REST (extraits)
 
 ### Utilisateurs
 - `GET /api/users`
@@ -62,6 +62,12 @@ psavi-web ├── api            # Contrôleurs REST ├── controller     
 
 ---
 
-## 🧪 Tester l’API
+##  Tester l’API
 
 L’API REST peut être testée avec **Postman** ou tout client HTTP.
+
+Ce que ce projet démontre
+Développement d’une application web complète en Spring Boot
+Conception d’une API REST sécurisée
+Séparation claire entre couche métier et couche web
+Utilisation conjointe de Spring MVC, Spring Security et Thymeleaf
