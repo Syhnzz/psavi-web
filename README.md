@@ -73,7 +73,7 @@ L’API REST peut être testée avec **Postman** ou tout client HTTP.
 
 ## Ce que ce projet démontre
 
-Développement d’une application web complète en Spring Boot
-Conception d’une API REST sécurisée
-Séparation claire entre couche métier et couche web
-Utilisation conjointe de Spring MVC, Spring Security et Thymeleaf
+- Développement d’une application web complète en Spring Boot
+- Conception d’une API REST sécurisée
+- Séparation claire entre couche métier et couche web
+- Utilisation conjointe de Spring MVC, Spring Security et Thymeleaf
