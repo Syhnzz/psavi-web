@@ -71,7 +71,7 @@ psavi-web ├── api            # Contrôleurs REST ├── controller     
 
 L’API REST peut être testée avec **Postman** ou tout client HTTP.
 
-##Ce que ce projet démontre
+## Ce que ce projet démontre
 
 Développement d’une application web complète en Spring Boot
 Conception d’une API REST sécurisée
