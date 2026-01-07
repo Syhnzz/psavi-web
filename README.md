@@ -5,7 +5,6 @@ Partie front d'un site e-commerce en java avec spring/boot et javascript réalis
 ![Java](https://img.shields.io/badge/Java-17-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-brightgreen)
 ![Spring Security](https://img.shields.io/badge/Spring-Security-green)
-![Docker](https://img.shields.io/badge/Docker-ready-blue)
 ![MySQL](https://img.shields.io/badge/MySQL-8-blue)
 
 PSAVI Web est l’application web du projet PSAVI, développée en **Java / Spring Boot**
