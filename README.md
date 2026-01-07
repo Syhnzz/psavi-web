@@ -62,6 +62,11 @@ psavi-web ├── api            # Contrôleurs REST ├── controller     
 
 ---
 
+##  Base de données
+
+- Base relationnelle MySQL
+- Initialisation via schema.sql
+
 ##  Tester l’API
 
 L’API REST peut être testée avec **Postman** ou tout client HTTP.
