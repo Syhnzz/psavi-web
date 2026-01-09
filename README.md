@@ -33,7 +33,6 @@ Elle fournit :
 - Thymeleaf, HTML, CSS
 - Bootstrap
 - Maven
-- Docker
 - Git
 
 ---
